@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.codebrahma">
+
+    <!-- Internet Permission, Sending Notifications -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!--Adds Calendar Permission to the app. -->
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+
+
+    <application
+        android:name=".App"
+        android:theme="@style/Theme.CodeBrahma"
+        tools:targetApi="31">
+
+        <!-- Firebase Cloud Messaging Service -->
+        <service
+            android:name=".FCMService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <!-- Main Activity (Entry Point) -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- First Activity (After Login) -->
+        <activity
+            android:name=".FirstActivity"
+            android:exported="false" />
+
+        <!-- GitHub OAuth Callback Activity -->
+        <activity
+            android:name=".auth.GitHubSignInActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="callback"
+                    android:scheme="codebrahma" />
+            </intent-filter>
+        </activity>
+
+    </application>
+
+</manifest>
