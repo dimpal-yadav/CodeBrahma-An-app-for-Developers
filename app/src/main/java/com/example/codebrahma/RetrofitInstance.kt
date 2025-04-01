@@ -9,7 +9,6 @@ interface NewsApi {
     @GET("news")
     suspend fun getNews(): List<NewsArticle>
 }
-
 object RetrofitInstance {
     val api: NewsApi by lazy {
         Retrofit.Builder()
@@ -19,3 +18,6 @@ object RetrofitInstance {
             .create(NewsApi::class.java)
     }
 }
+
+//this scraps coding related news from the web
+

@@ -18,10 +18,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Divider
@@ -52,6 +50,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -175,7 +174,7 @@ fun LearnNavBotSheet() {
 
                 NavigationDrawerItem(
                     label = { Text(text = "Your Code Snippets", color = Color.Black) },
-                    selected = currentRoute == Screens.SavedCodeSnippets.screen,
+                    selected = currentRoute == Screens.SnippetScreen.screen,
                     icon = {
                         Icon(
                             painter = painterResource(id = R.drawable.auto_write_code),
@@ -186,14 +185,14 @@ fun LearnNavBotSheet() {
                     },
                     onClick = {
                         coroutineScope.launch { drawerState.close() }
-                        navigationcontroller.navigate(Screens.SavedCodeSnippets.screen) {
-                            popUpTo(Screens.SavedCodeSnippets.screen) { inclusive = false }
+                        navigationcontroller.navigate(Screens.SnippetScreen.screen) {
+                            popUpTo(Screens.SnippetScreen.screen) { inclusive = false }
                         }
                     }
                 )
 
                 NavigationDrawerItem(
-                    label = { Text(text = "AI Learning Paths", color = Color.Black) },
+                    label = { Text(text = "Roadmap Generator", color = Color.Black) },
                     selected = currentRoute == Screens.AiLearningPaths.screen,
                     icon = {
                         Icon(
@@ -210,7 +209,6 @@ fun LearnNavBotSheet() {
                         }
                     }
                 )
-
                 NavigationDrawerItem(
                     label = { Text(text = "Smart Documentation Search", color = Color.Black) },
                     selected = currentRoute == Screens.SearchDocumentation.screen,
@@ -229,9 +227,8 @@ fun LearnNavBotSheet() {
                         }
                     }
                 )
-
                 NavigationDrawerItem(
-                    label = { Text(text = "Optimize and Debug Code", color = Color.Black) },
+                    label = { Text(text = "Run and Debug Code", color = Color.Black) },
                     selected = currentRoute == Screens.CodeOptimizationandDebugging.screen,
                     icon = {
                         Icon(
@@ -248,9 +245,8 @@ fun LearnNavBotSheet() {
                         }
                     }
                 )
-
                 NavigationDrawerItem(
-                    label = { Text(text = "Tasks And Reminder Manager", color = Color.Black) },
+                    label = { Text(text = "Manage Tasks and Reminders", color = Color.Black) },
                     selected = currentRoute == Screens.TaskandReminderManager.screen,
                     icon = {
                         Icon(
@@ -331,7 +327,7 @@ fun LearnNavBotSheet() {
             topBar = {
                 Row {
                     TopAppBar(
-                        title = { Text("Code Brahma") },
+                        title = { Text("Code Brahma", fontFamily = FontFamily.Serif) },
                         colors = TopAppBarDefaults.topAppBarColors(
                             containerColor = Color(0xFF2196F3),
                             titleContentColor = Color.White,
@@ -344,6 +340,7 @@ fun LearnNavBotSheet() {
                         },
                         actions = {
                             val selected = remember { mutableStateOf("") }
+                            val context = LocalContext.current
                             IconButton(
                                 onClick = {
                                     selected.value = Screens.Settings.screen
@@ -360,7 +357,8 @@ fun LearnNavBotSheet() {
                                     tint = if (selected.value == Screens.Settings.screen) Color.Unspecified else Color.Unspecified
                                 )
                             }
-                            IconButton(onClick = { /* TODO: Add favorite action */ }) {
+                            IconButton(onClick = { MyNotification(context, "FCM", "Wake up! With Great Knowledge comes Increased Development")
+                                .FirNotification() }) {
                                 Icon(Icons.Default.Favorite, contentDescription = "Favorite")
                             }
                         }
@@ -465,12 +463,11 @@ fun LearnNavBotSheet() {
                         )
                     }
                 }
-
             }
         ) {
             NavHost(navController = navigationcontroller, startDestination = Screens.Home.screen) {
                 composable(Screens.Home.screen) { Home() }
-                composable(Screens.SavedCodeSnippets.screen) { SavedCodeSnippets() }
+                composable(Screens.SnippetScreen.screen) { SnippetScreen() }
                 composable(Screens.AiLearningPaths.screen) { AiLearningPaths() }
                 composable(Screens.SearchDocumentation.screen) { SearchDocumentation() }
                 composable(Screens.CodeOptimizationandDebugging.screen) { CodeOptimizationAndDebugging() }
@@ -498,15 +495,5 @@ fun FCMMessage() {
             .padding(top = 8.dp,end = 4.dp),
         contentAlignment = Alignment.TopEnd
     ) {
-        IconButton(onClick = {
-            MyNotification(context, "FCM", "Wake up! With Great Knowledge comes Increased Development")
-                .FirNotification()
-        }) {
-            Icon(
-                imageVector = Icons.Default.Favorite,
-                contentDescription = "Notification",
-                tint = MaterialTheme.colorScheme.primary
-            )
-        }
     }
 }

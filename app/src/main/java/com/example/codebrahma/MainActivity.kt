@@ -20,12 +20,9 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         requestPermissionsIfNeeded()
-
         val user = FirebaseAuthManager.getCurrentUser()
         val firestore = FirebaseFirestore.getInstance()
-
         if (user != null) {
             firestore.collection("users").document(user.uid).get()
                 .addOnSuccessListener { document ->
@@ -53,24 +50,21 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
     private fun requestPermissionsIfNeeded() {
         val permissionsToRequest = mutableListOf<String>()
-
-        // Check notification permission (Android 13+)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                 permissionsToRequest.add(Manifest.permission.POST_NOTIFICATIONS)
             }
         }
 
-        // Check calendar permissions
+
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED ||
             ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
             permissionsToRequest.add(Manifest.permission.READ_CALENDAR)
             permissionsToRequest.add(Manifest.permission.WRITE_CALENDAR)
         }
-
         if (permissionsToRequest.isNotEmpty()) {
             ActivityCompat.requestPermissions(this, permissionsToRequest.toTypedArray(), 1001)
         }

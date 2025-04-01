@@ -2,50 +2,63 @@ package com.example.codebrahma.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.codebrahma.api.QnaApiService
-import com.example.codebrahma.api.QnaRetrofitInstance
-import com.example.codebrahma.api.QnARequest
+import com.example.codebrahma.network.ApiService
+import com.example.codebrahma.network.RetrofitClient
+import com.example.codebrahma.network.Snippet
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class QnaViewModel : ViewModel() {
-    private val qnaApi: QnaApiService = QnaRetrofitInstance.api
+    private val apiService: ApiService = RetrofitClient.instance
 
-    private val _qnaList = MutableStateFlow<List<QnARequest>>(emptyList())
-    val qnaList: StateFlow<List<QnARequest>> = _qnaList
+    private val _snippets = MutableStateFlow<List<Snippet>>(emptyList())
+    val snippets = _snippets.asStateFlow()
 
-    private val _answer = MutableStateFlow<String?>(null)
-    val answer: StateFlow<String?> = _answer
-
-    fun addQnA(question: String, answer: String) {
+    fun fetchSnippets() {
         viewModelScope.launch {
-            qnaApi.addQnA(QnARequest(question, answer))
-        }
-    }
-
-    fun askQuestion(question: String) {
-        viewModelScope.launch {
-            val response = qnaApi.askQuestion(QnARequest(question))
-            if (response.isSuccessful) {
-                _answer.value = response.body()?.answer
+            try {
+                val response = apiService.listSnippets()
+                _snippets.value = response.snippets ?: emptyList()
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }
 
-    fun listQnA() {
+    fun addSnippet(title: String, description: String, code: String) {
         viewModelScope.launch {
-            val response = qnaApi.listQnA()
-            if (response.isSuccessful) {
-                _qnaList.value = response.body()?.qna_list ?: emptyList()
+            try {
+                val response = apiService.addSnippet(Snippet(title = title, description = description, code_snippet = code))
+                val newSnippet = Snippet(id = (_snippets.value.size + 1), title = title, description = description, code_snippet = code)
+
+                _snippets.value = _snippets.value + newSnippet
+
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }
 
-    fun deleteQnA(question: String) {
+
+    fun updateSnippet(id: Int, title: String, description: String, code: String) {
         viewModelScope.launch {
-            qnaApi.deleteQnA(QnARequest(question))
-            listQnA()
+            try {
+                apiService.updateSnippet(Snippet(id = id, title = title, description = description, code_snippet = code))
+                fetchSnippets()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+    fun deleteSnippet(id: Int) {
+        viewModelScope.launch {
+            try {
+                apiService.deleteSnippet(id)
+                fetchSnippets()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 }

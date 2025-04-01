@@ -121,10 +121,7 @@ fun Settings() {
                         context.startActivity(intent)
                     }
                 )
-
                 Spacer(modifier = Modifier.height(20.dp))
-
-                // Centered notification status
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()

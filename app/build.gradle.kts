@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("com.google.gms.google-services")
+    id("kotlin-kapt")
+
 }
 
 android {
@@ -11,8 +13,9 @@ android {
 
     defaultConfig {
         applicationId = "com.example.codebrahma"
-        minSdk = 24
+        minSdk = 29
         targetSdk = 35
+        multiDexEnabled = true
         versionCode = 1
         versionName = "1.0"
 
@@ -56,6 +59,7 @@ dependencies {
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.androidx.camera.view)
     implementation(libs.firebase.messaging)
+    implementation(files("libs\\jython-standalone-2.7.2.jar"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -89,6 +93,13 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.7.1")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("io.coil-kt:coil-compose:2.4.0") // Image loading
+    implementation("io.coil-kt:coil-compose:2.4.0")
     implementation("com.google.accompanist:accompanist-swiperefresh:0.31.3-beta")
+
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+
+    implementation("androidx.multidex:multidex:2.0.1")
+    implementation(files("libs/jython-standalone-2.7.2.jar"))
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 }

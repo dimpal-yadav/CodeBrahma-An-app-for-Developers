@@ -22,7 +22,6 @@ fun AutoWriteCode(){
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally) {
             Text(text = "Write code faster using Voice",fontSize = 30.sp, color = Color.Black)
-
         }
     }
 }
