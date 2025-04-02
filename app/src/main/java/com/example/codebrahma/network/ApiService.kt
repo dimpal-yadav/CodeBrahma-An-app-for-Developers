@@ -1,5 +1,3 @@
-//this is API Service from Flask Backend for SnippetScreen.kt
-
 package com.example.codebrahma.network
 
 import retrofit2.Retrofit
