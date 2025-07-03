@@ -1,117 +1,166 @@
 package com.example.codebrahma
 
-import androidx.compose.animation.animateContentSize
+import android.annotation.SuppressLint
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
-import kotlinx.coroutines.launch
+import androidx.compose.ui.viewinterop.AndroidView
 
 @Composable
 fun Home() {
-    val items = listOf("Python", "Kotlin", "Java", "C++", "JavaScript")
-    val coroutineScope = rememberCoroutineScope()
-    var expandedCard by remember { mutableStateOf(-1) }
+    val pythonSnippets = listOf(
+        """
+            def greet(name):
+                return f"Hello, {name}!"
+            
+            print(greet("Aditya"))
+        """.trimIndent(),
+
+        """
+            for i in range(5):
+                print("CodeBrahma Rocks!")
+        """.trimIndent(),
+
+        """
+            x = [i*i for i in range(10)]
+            print(x)
+        """.trimIndent(),
+
+        """
+            def factorial(n):
+                return 1 if n == 0 else n * factorial(n - 1)
+            
+            print(factorial(5))
+        """.trimIndent()
+    )
+
+    val selectedSnippet = remember { pythonSnippets.random() }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFF121212))
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.Start
+            .padding(top=96.dp, bottom = 32.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Text(
-            text = "Welcome to Code Brahma",
-            fontSize = 26.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.White
-        )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        QuoteImageCard()
+        Spacer(modifier = Modifier.padding(16.dp))
+        CodeSnippetCard(selectedSnippet)
+        GitHubStatsWeb()
+    }
+}
 
-        LazyRow {
-            items(items) { language ->
-                LanguageCard(language)
-            }
-        }
+@SuppressLint("SetJavaScriptEnabled")
+@Composable
+fun QuoteImageCard() {
+    val htmlContent = """
+        <html style="margin:0;padding:20px;background-color:#121212;">
+        <body style="margin:0;padding:10px;text-align:center;background-color:#121212;">
+            <img src="https://quotes-github-readme.vercel.app/api?type="vertical"&theme=merko" alt="Dev Quote"
+                 style="width:50%;height:auto;" />
+        </body>
+        </html>
+    """.trimIndent()
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            modifier = Modifier.fillMaxSize()
-        ) {
-            items(items.indices.toList()) { index ->
-                ExpandableCard(
-                    title = "${items[index]} Resources",
-                    isExpanded = expandedCard == index,
-                    onExpandChange = {
-                        coroutineScope.launch {
-                            if (expandedCard == index) {
-                                expandedCard = -1
-                            } else {
-                                expandedCard = index
-                            }
-                        }
-                    }
+    AndroidView(
+        factory = { context ->
+            WebView(context).apply {
+                settings.javaScriptEnabled = true
+                webViewClient = WebViewClient()
+                loadDataWithBaseURL(
+                    null,
+                    htmlContent,
+                    "text/html",
+                    "UTF-8",
+                    null
                 )
             }
-        }
-    }
-}
-
-@Composable
-fun LanguageCard(language: String) {
-    Card(
+        },
         modifier = Modifier
-            .padding(8.dp)
-            .size(width = 150.dp, height = 80.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFF1E88E5))
-    ) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text(text = language, fontSize = 18.sp, color = Color.White, fontWeight = FontWeight.Bold)
-        }
-    }
+            .fillMaxWidth()
+            .height(150.dp)
+    )
 }
 
+
 @Composable
-fun ExpandableCard(title: String, isExpanded: Boolean, onExpandChange: () -> Unit) {
+fun CodeSnippetCard(snippet: String) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFF424242))
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF2C2C2C))
     ) {
-        Column(
-            modifier = Modifier
-                .animateContentSize()
-                .padding(16.dp)
-        ) {
-            Text(text = title, fontSize = 20.sp, color = Color.White, fontWeight = FontWeight.Bold)
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = "Code Snippet of the Day",
+                fontSize = 18.sp,
+                color = Color.White
+            )
             Spacer(modifier = Modifier.height(8.dp))
-            Button(onClick = onExpandChange, colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1E88E5))) {
-                Text(text = if (isExpanded) "Collapse" else "Expand", color = Color.White)
-            }
-            if (isExpanded) {
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(text = "Here are your resources for $title", color = Color.LightGray)
-            }
+            Text(
+                text = snippet,
+                color = Color(0xFFCE93D8),
+                fontFamily = FontFamily.Monospace,
+                fontSize = 14.sp,
+                lineHeight = 20.sp
+            )
         }
     }
 }
 
-@Preview(showBackground = true)
+@SuppressLint("SetJavaScriptEnabled")
 @Composable
-fun PreviewHomeScreen() {
-    Home()
+fun GitHubStatsWeb() {
+    val html = """
+        <html style="background-color:#121212;">
+  <body style="margin:0; padding:0;">
+    <div align="center" style="width: 100%;">
+      <table width="100%" style="margin-top:16px;">
+        <tr>
+          <td width="100%" valign="middle" style="padding-bottom: 16px;">
+            <!-- GitHub Streak Card -->
+            <a href="https://github.com/Aditya948351">
+              <img src="https://github-readme-streak-stats.herokuapp.com/?user=Aditya948351&theme=dracula" 
+                   alt="GitHub Streak" width="100%" />
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <td width="100%" valign="middle">
+            <!-- GitHub Stats Card -->
+            <a href="https://github.com/Aditya948351">
+              <img src="https://github-readme-stats.vercel.app/api?username=Aditya948351&show_icons=true&show=reviews,prs_merged,prs_merged_percentage&theme=dark" 
+                   width="100%" />
+            </a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>
+
+    """.trimIndent()
+
+    AndroidView(factory = { context ->
+        WebView(context).apply {
+            webViewClient = WebViewClient()
+            settings.javaScriptEnabled = true
+            loadDataWithBaseURL(null, html, "text/html", "UTF-8", null)
+        }
+    }, modifier = Modifier
+        .fillMaxWidth()
+        .fillMaxHeight()
+        .height(300.dp)
+        .padding(vertical = 16.dp))
 }
