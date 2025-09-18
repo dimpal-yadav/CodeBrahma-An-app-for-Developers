@@ -41,7 +41,8 @@
     <li><strong>Home Dashboard</strong> - Displays latest news & debugging insights.</li>
     <li><strong>Task & Reminder Manager</strong> - Manages pending tasks & deadlines.</li>
     <li><strong>Saved Code Snippets</strong> - Local storage for frequently used code.</li>
-    <li><strong>Offline AI Debugging Mode</strong> - Works without internet.</li>
+    <li><strong>Offline AI Debugging Mode</strong> - Works without internet.
+</li>
 </ul>
 
 <h2>🛠️ Tech Stack & Architecture</h2>
