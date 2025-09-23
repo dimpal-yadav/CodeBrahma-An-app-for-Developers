@@ -46,3 +46,11 @@ git clone https://github.com/aditya948351/CodeBrahma-An-app-for-Developers.git
 cd codebrahma
 ```
 
+or 
+1. Open with Github Desktop.
+2. Clone at your Local folder by selecting it.
+3. Make Sure u have Latest Android Studio version installed.
+4. Wait till the Project gets Imported (wait 5-10 mins untill run button turns green).
+5. Run the Project by Connecting Smartphone With USB with Developer Options Turned on and USB debugging turned on in it. (2-3 mins).
+
+
