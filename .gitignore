@@ -1,15 +1,74 @@
+# Android Studio / IntelliJ
+.idea/
 *.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
+.gradle/
 local.properties
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Gradle (ignore wrapper to avoid version conflicts)
+.gradle/
+**/build/
+gradle-wrapper.jar
+gradle-wrapper.properties
+
+# Kotlin
+*.kt~
+*.kts~
+
+# Jetpack Compose Preview Cache
+.idea/deploymentTargetDropDown.xml
+.idea/other.xml
+
+# Log files
+*.log
+
+# Android specific
+*.apk
+*.ap_
+*.aab
+*.aar
+*.dex
+*.class
+*.so
+*.hprof
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Keystore files (keep safe outside git)
+*.jks
+*.keystore
+
+# Google Services (keep secure, don’t push to repo)
+google-services.json
+GoogleService-Info.plist
+
+# Firebase Crashlytics / Analytics
+crashlytics-build.properties
+fabric.properties
+
+# NDK / CMake
+obj/
+*.cxx/
+
+# Misc
+*.swp
+*.tmp
+*.orig
+*.bak
+
+# User-specific configs
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/dictionaries
+.idea/libraries
+.idea/assetWizardSettings.xml
+.idea/compiler.xml
+.idea/jarRepositories.xml
+.idea/misc.xml
+.idea/vcs.xml
+.idea/gradle.xml
+.idea/modules.xml
