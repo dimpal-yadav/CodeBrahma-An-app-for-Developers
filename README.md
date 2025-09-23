@@ -42,5 +42,7 @@ Think of it as a **community-driven space** where coders can:
 
 ### 1. Clone the repository
 ```bash
-[git clone https://github.com/aditya948351/CodeBrahma-An-app-for-Developers.git](https://github.com/Aditya948351/CodeBrahma-An-app-for-Developers.git)
+git clone https://github.com/aditya948351/CodeBrahma-An-app-for-Developers.git
 cd codebrahma
+```
+
