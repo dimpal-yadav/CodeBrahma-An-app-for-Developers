@@ -9,3 +9,7 @@
 *.json
 *.keystore
 /Screenshots/
+*.toml
+*.properties
+.properties
+.toml
